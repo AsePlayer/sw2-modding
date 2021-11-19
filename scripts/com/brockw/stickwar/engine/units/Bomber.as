@@ -16,6 +16,8 @@ package com.brockw.stickwar.engine.units
       
       private var explosionDamage:Number;
       
+      public var bomberType:String;
+      
       public function Bomber(game:StickWar)
       {
          super(game);
@@ -114,6 +116,11 @@ package com.brockw.stickwar.engine.units
       override public function update(game:StickWar) : void
       {
          updateCommon(game);
+         this.bomberType = "poisonBomber";
+         if(this.bomberType != "")
+         {
+            isCustomUnit = true;
+         }
          if(!isDieing)
          {
             if(_isDualing)
@@ -174,7 +181,11 @@ package com.brockw.stickwar.engine.units
             _mc.gotoAndStop(getDeathLabel(game));
             _mc.mc.alpha = 0;
          }
-         if(!hasDefaultLoadout)
+         if(this.bomberType == "poisonBomber")
+         {
+            Bomber.setItem(_bomber(mc),"Flask","Scientist","");
+         }
+         else
          {
             Bomber.setItem(_bomber(mc),team.loadout.getItem(this.type,MarketItem.T_WEAPON),team.loadout.getItem(this.type,MarketItem.T_ARMOR),team.loadout.getItem(this.type,MarketItem.T_MISC));
          }
@@ -185,6 +196,10 @@ package com.brockw.stickwar.engine.units
          team.game.soundManager.playSoundRandom("mediumExplosion",3,px,py);
          this.damage(0,this.maxHealth,null);
          team.game.projectileManager.initNuke(px,py,this,this.explosionDamage);
+         if(this.bomberType == "poisonBomber")
+         {
+            team.game.projectileManager.initPoisonPool(px,py,this,0);
+         }
       }
       
       override public function get damageToArmour() : Number

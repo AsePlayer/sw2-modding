@@ -286,6 +286,8 @@ package com.brockw.stickwar.engine.units
       
       private var lastWalkFrame:int;
       
+      public var isCustomUnit:Boolean;
+      
       public function Unit(game:StickWar)
       {
          this.hasDefaultLoadout = false;
@@ -794,7 +796,7 @@ package com.brockw.stickwar.engine.units
             {
                this.health = this.maxHealth;
             }
-            this._healTimeRemaining -= 1;
+            --this._healTimeRemaining;
          }
          if(this._health + this.chaosHealRate <= this.maxHealth && this.team.type == Team.T_CHAOS)
          {
@@ -802,7 +804,7 @@ package com.brockw.stickwar.engine.units
          }
          if(this.slowFramesRemaining)
          {
-            this.slowFramesRemaining -= 1;
+            --this.slowFramesRemaining;
          }
          ++this._timeOfDeath;
          this.healthBar.health = this.health;
@@ -995,7 +997,7 @@ package com.brockw.stickwar.engine.units
          ++this._lastTurnCount;
          if(this._stunTimeLeft > 0)
          {
-            this._stunTimeLeft -= 1;
+            --this._stunTimeLeft;
          }
          if(this.isDualing == true)
          {

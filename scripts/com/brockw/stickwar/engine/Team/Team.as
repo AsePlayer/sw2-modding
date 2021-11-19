@@ -234,7 +234,7 @@ package com.brockw.stickwar.engine.Team
       
       public static function getTeamFromId(id:int, game:StickWar, health:int, techAllowed:Dictionary, handicap:* = 1.0, healthModifier:Number = 1.0) : Team
       {
-         var original:int = id;
+         var original:* = id;
          if(id == Team.T_RANDOM)
          {
             id = game.random.nextInt() % 2;
@@ -639,8 +639,8 @@ package com.brockw.stickwar.engine.Team
       
       public function getVisionRange() : Number
       {
-         var a:Number = this.game.team.homeX;
-         var b:Number = a;
+         var a:* = this.game.team.homeX;
+         var b:* = a;
          if(this.game.team.forwardUnit != null)
          {
             b = this.game.team.forwardUnit.x;
@@ -677,7 +677,8 @@ package com.brockw.stickwar.engine.Team
          var _loc4_:Unit = null;
          if(backwards)
          {
-            for(_loc5_ = this._unitProductionQueue[_loc3_].length - 1; _loc5_ >= 0; _loc5_--)
+            _loc5_ = this._unitProductionQueue[_loc3_].length - 1;
+            while(_loc5_ >= 0)
             {
                _loc6_ = this._unitProductionQueue[_loc3_][_loc5_][0];
                if(_loc6_.type == type)
@@ -686,11 +687,13 @@ package com.brockw.stickwar.engine.Team
                   this._unitProductionQueue[_loc3_].splice(_loc5_,1);
                   break;
                }
+               _loc5_--;
             }
          }
          else
          {
-            for(_loc5_ = 0; _loc5_ < this._unitProductionQueue[_loc3_].length; _loc5_++)
+            _loc5_ = 0;
+            while(_loc5_ < this._unitProductionQueue[_loc3_].length)
             {
                _loc6_ = this._unitProductionQueue[_loc3_][_loc5_][0];
                if(_loc6_.type == type)
@@ -699,6 +702,7 @@ package com.brockw.stickwar.engine.Team
                   this._unitProductionQueue[_loc3_].splice(_loc5_,1);
                   break;
                }
+               _loc5_++;
             }
          }
          if(_loc4_ == null)
@@ -1068,7 +1072,12 @@ package com.brockw.stickwar.engine.Team
       
       public function removeUnitCompletely(unit:Unit, game:StickWar) : void
       {
+         var isNormalUnit:Boolean = true;
          this._units.splice(this._units.indexOf(unit),1);
+         if(game.units[unit.id].isCustomUnit)
+         {
+            isNormalUnit = false;
+         }
          delete game.units[unit.id];
          if(game.battlefield.contains(unit))
          {
@@ -1079,7 +1088,14 @@ package com.brockw.stickwar.engine.Team
          {
             this.unitGroups[unit.type].splice(index,1);
          }
-         game.unitFactory.returnUnit(unit.type,unit);
+         if(isNormalUnit)
+         {
+            game.unitFactory.returnUnit(unit.type,unit);
+         }
+         else
+         {
+            trace("special unit died, not returning to unit factory");
+         }
          if(unit.id in this.garrisonedUnits)
          {
             delete this.garrisonedUnits[unit.id];
@@ -1332,7 +1348,7 @@ package com.brockw.stickwar.engine.Team
          mc.graphics.lineTo(width / 2,height / 2);
          var theta:Number = fraction * 2 * Math.PI;
          var cornerAngle:Number = Math.atan2(width / 2,height / 2);
-         var a:Number = theta;
+         var a:* = theta;
          if(theta < cornerAngle)
          {
             mc.graphics.lineTo(width / 2 + Util.tan(theta) * height / 2,0);
