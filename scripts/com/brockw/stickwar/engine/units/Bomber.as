@@ -116,7 +116,6 @@ package com.brockw.stickwar.engine.units
       override public function update(game:StickWar) : void
       {
          updateCommon(game);
-         this.bomberType = "poisonBomber";
          if(this.bomberType != "")
          {
             isCustomUnit = true;

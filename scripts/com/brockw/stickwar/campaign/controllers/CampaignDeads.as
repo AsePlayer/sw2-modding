@@ -2,6 +2,7 @@ package com.brockw.stickwar.campaign.controllers
 {
    import com.brockw.stickwar.GameScreen;
    import com.brockw.stickwar.campaign.InGameMessage;
+   import com.brockw.stickwar.engine.units.Bomber;
    import com.brockw.stickwar.engine.units.Unit;
    
    public class CampaignDeads extends CampaignController
@@ -12,6 +13,8 @@ package com.brockw.stickwar.campaign.controllers
       
       private var frames:int;
       
+      private var spawnedBomber:Boolean;
+      
       public function CampaignDeads(gameScreen:GameScreen)
       {
          super(gameScreen);
@@ -20,6 +23,14 @@ package com.brockw.stickwar.campaign.controllers
       override public function update(gameScreen:GameScreen) : void
       {
          var u:Unit = null;
+         var u1:Bomber = null;
+         if(!this.spawnedBomber)
+         {
+            u1 = Bomber(gameScreen.game.unitFactory.getUnit(Unit.U_BOMBER));
+            u1.bomberType = "poisonBomber";
+            gameScreen.team.spawn(u1,gameScreen.game);
+            this.spawnedBomber = true;
+         }
          if(this.message && gameScreen.contains(this.message))
          {
             this.message.update();
